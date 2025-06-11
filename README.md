@@ -1,2 +1,2 @@
 # Pyentificalc
- A scientific calculator written in Python
+ A scientific calculator written in Python.
