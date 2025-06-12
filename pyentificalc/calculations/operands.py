@@ -30,10 +30,10 @@ class NumericalOperand:
         # How many decimal points are represented by coeff?
         # eg: a coeff of 123123 represents 1.23123
         # coeff_mag(123123) = 5, as .23123 has 5 digits
-        coeff_magnitude = m.floor(m.log10(self._coefficient))
+        coeff_magnitude = len(str(self._coefficient)) - 1
         # How many spaces do we need to move coeff's decimal point?
         # eg: if coeff = 123123 and the final magnitude = 2, our value is 123.123
         # to get 123.123, the decimal point of 123123 needs to be moved left 3 spaces
         # coeff_magnitude(123123) = 5, final_magnitude = 2, 2 - 5 = -3
         change_in_magnitude = Decimal(self._final_magnitude - coeff_magnitude)
-        return Decimal(self._coeff) * 10 ** change_in_magnitude
+        return Decimal(self._coefficient) * 10 ** change_in_magnitude
