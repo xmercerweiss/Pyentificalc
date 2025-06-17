@@ -1,3 +1,4 @@
+from numbers import Integral
 from decimal import Decimal
 import math as m
 
@@ -11,6 +12,9 @@ class NumericalOperand:
     in order to produce the operand's value. eg: 144's magnitude is 2, as 144 = 1.44e2.
     """
 
+    NEG_COEFF_ERR_MSG = "Coefficients must be positive, signs are handled using the Sign enum argument"
+    NONWHOLE_MAG_ERR_MSG = "Magnitudes must be integer values"
+
     def __init__(self, coefficient: int, magnitude: int, sign: Sign = Sign.POS):
         """ Initializes an operand for representation with scientific notation.
 
@@ -19,11 +23,38 @@ class NumericalOperand:
             magnitude: An integer representing the operand's magnitude.
             sign: A Sign enum representing the operand's sign; defaults to positive.
         """
-        self._coefficient = coefficient
+        self._coefficient = self._normalize_coefficient(coefficient)
         self._final_magnitude = magnitude
         self._sign = sign
 
-    def to_decimal_value(self) -> Decimal:
+    def _normalize_coefficient(self, given: int):
+        # The coefficient must be positive, signs are handled separately
+        if given < 0:
+            raise ValueError(self.NEG_COEFF_ERR_MSG)
+        # Extra zeros must be removed
+        output = given
+        while output > 0 and output % 10 == 0:
+            output /= 10
+        # Normalized to int for internal consistency
+        return int(output)
+    
+    def _normalize_magnitude(self, given: int):
+        # Non-whole magnitudes cannot be used
+        if not isinstance(given, Integral):
+            raise TypeError(self.NONWHOLE_MAG_ERR_MSG)
+        # Normalized to int for internal consistency
+        return int(given)
+
+    def get_coefficient(self):
+        pass
+
+    def get_magnitude(self):
+        pass
+
+    def get_sign(self):
+        pass
+
+    def get_value(self) -> Decimal:
         """Returns the closest decimal approximation of the operand's value.
 
         Returns: The operand's value as a Decimal object.
